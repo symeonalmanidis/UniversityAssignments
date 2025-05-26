@@ -50,6 +50,9 @@ ST_TABLE_TYPE symbolTable;
 %token T_fplus "+."
 %token T_fmul "*."
 
+%token T_min "min"
+%token T_max "max"
+
 %token '='
 
 %token <lexical> T_id;
@@ -89,6 +92,8 @@ expr : T_num {$$ = type_integer; pushInteger(atoi($1));}
      | '*' expr expr {$$ = type_integer; insertOPERATION(type_integer,"mul");}
      | "+." expr expr {$$ = type_real; insertOPERATION(type_real,"add");}
      | "*." expr expr {$$ = type_real; insertOPERATION(type_real,"mul");}
+     | "min" expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG("java/lang/Math/min", $$, 2, $2, $3);}
+     | "max" expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG("java/lang/Math/max", $$, 2, $2, $3);}
      | '(' expr ')' {$$ = $2;}
      ;
 

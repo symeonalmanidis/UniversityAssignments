@@ -18,9 +18,9 @@ newline \n|\x0A|\x0D\x0A
 "start" {return T_start;}
 "end" {return T_end;}
 "print" {return T_print;}
-
 "int" {yylval.tokentype = type_integer; return T_type;}
 "float" {yylval.tokentype = type_real; return T_type;}
+
 
 "(" {return '(';}
 ")" {return ')';}
@@ -28,6 +28,10 @@ newline \n|\x0A|\x0D\x0A
 "*" {return '*';}
 "+." {return T_fplus;}
 "*." {return T_fmul;}
+
+"min" {return T_min;}
+"max" {return T_max;}
+
 "=" {return '=';}
 
 {VARIABLE} {yylval.lexical = strdup(yytext);  return T_id;}
