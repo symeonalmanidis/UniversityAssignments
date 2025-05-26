@@ -1,0 +1,5 @@
+start simple4
+(= y 10.5)
+(= x (+ 3 (int y)))
+(print x)
+end
