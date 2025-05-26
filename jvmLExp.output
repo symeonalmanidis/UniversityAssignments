@@ -19,57 +19,59 @@ Grammar
     9 expr: T_num
    10     | T_real
    11     | T_id
-   12     | '+' expr expr
-   13     | '*' expr expr
-   14     | "+." expr expr
-   15     | "*." expr expr
-   16     | '(' expr ')'
+   12     | T_type expr
+   13     | '+' expr expr
+   14     | '*' expr expr
+   15     | "+." expr expr
+   16     | "*." expr expr
+   17     | '(' expr ')'
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    '(' (40) 3 16
-    ')' (41) 3 16
-    '*' (42) 13
-    '+' (43) 12
+    '(' (40) 3 17
+    ')' (41) 3 17
+    '*' (42) 14
+    '+' (43) 13
     '=' (61) 8
     error (256)
     "start" (258) 2
     "end" (259) 2
     "print" (260) 7
-    "+." (261) 14
-    "*." (262) 15
-    T_id <lexical> (263) 2 8 11
-    T_num <lexical> (264) 9
-    T_real <lexical> (265) 10
+    T_type <tokentype> (261) 12
+    "+." (262) 15
+    "*." (263) 16
+    T_id <lexical> (264) 2 8 11
+    T_num <lexical> (265) 9
+    T_real <lexical> (266) 10
 
 
 Nonterminals, with rules where they appear
 
-    $accept (16)
+    $accept (17)
         on left: 0
-    program (17)
+    program (18)
         on left: 2
         on right: 0
-    $@1 (18)
+    $@1 (19)
         on left: 1
         on right: 2
-    stmts (19)
+    stmts (20)
         on left: 3 4
         on right: 2 3
-    stmt (20)
+    stmt (21)
         on left: 5 6
         on right: 3
-    printcmd (21)
+    printcmd (22)
         on left: 7
         on right: 5
-    asmt (22)
+    asmt (23)
         on left: 8
         on right: 6
-    expr <tokentype> (23)
-        on left: 9 10 11 12 13 14 15 16
-        on right: 7 8 12 13 14 15 16
+    expr <tokentype> (24)
+        on left: 9 10 11 12 13 14 15 16 17
+        on right: 7 8 12 13 14 15 16 17
 
 
 State 0
@@ -145,30 +147,31 @@ State 8
 
     7 printcmd: "print" • expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
-    expr  go to state 22
+    expr  go to state 23
 
 
 State 9
 
     8 asmt: '=' • T_id expr
 
-    T_id  shift, and go to state 23
+    T_id  shift, and go to state 24
 
 
 State 10
 
     3 stmts: '(' stmt • ')' stmts
 
-    ')'  shift, and go to state 24
+    ')'  shift, and go to state 25
 
 
 State 11
@@ -194,129 +197,152 @@ State 13
 
 State 14
 
-   16 expr: '(' • expr ')'
+   12 expr: T_type • expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
-
-    expr  go to state 25
-
-
-State 15
-
-   12 expr: '+' • expr expr
-
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
     expr  go to state 26
 
 
-State 16
+State 15
 
-   13 expr: '*' • expr expr
+   17 expr: '(' • expr ')'
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
     expr  go to state 27
 
 
-State 17
+State 16
 
-   14 expr: "+." • expr expr
+   13 expr: '+' • expr expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
     expr  go to state 28
 
 
-State 18
+State 17
 
-   15 expr: "*." • expr expr
+   14 expr: '*' • expr expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
     expr  go to state 29
 
 
+State 18
+
+   15 expr: "+." • expr expr
+
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
+
+    expr  go to state 30
+
+
 State 19
+
+   16 expr: "*." • expr expr
+
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
+
+    expr  go to state 31
+
+
+State 20
 
    11 expr: T_id •
 
     $default  reduce using rule 11 (expr)
 
 
-State 20
+State 21
 
     9 expr: T_num •
 
     $default  reduce using rule 9 (expr)
 
 
-State 21
+State 22
 
    10 expr: T_real •
 
     $default  reduce using rule 10 (expr)
 
 
-State 22
+State 23
 
     7 printcmd: "print" expr •
 
     $default  reduce using rule 7 (printcmd)
 
 
-State 23
+State 24
 
     8 asmt: '=' T_id • expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
-    expr  go to state 30
+    expr  go to state 32
 
 
-State 24
+State 25
 
     3 stmts: '(' stmt ')' • stmts
 
@@ -324,124 +350,135 @@ State 24
 
     $default  reduce using rule 4 (stmts)
 
-    stmts  go to state 31
-
-
-State 25
-
-   16 expr: '(' expr • ')'
-
-    ')'  shift, and go to state 32
+    stmts  go to state 33
 
 
 State 26
 
-   12 expr: '+' expr • expr
+   12 expr: T_type expr •
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
-
-    expr  go to state 33
+    $default  reduce using rule 12 (expr)
 
 
 State 27
 
-   13 expr: '*' expr • expr
+   17 expr: '(' expr • ')'
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
-
-    expr  go to state 34
+    ')'  shift, and go to state 34
 
 
 State 28
 
-   14 expr: "+." expr • expr
+   13 expr: '+' expr • expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
     expr  go to state 35
 
 
 State 29
 
-   15 expr: "*." expr • expr
+   14 expr: '*' expr • expr
 
-    '('     shift, and go to state 14
-    '+'     shift, and go to state 15
-    '*'     shift, and go to state 16
-    "+."    shift, and go to state 17
-    "*."    shift, and go to state 18
-    T_id    shift, and go to state 19
-    T_num   shift, and go to state 20
-    T_real  shift, and go to state 21
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
 
     expr  go to state 36
 
 
 State 30
 
+   15 expr: "+." expr • expr
+
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
+
+    expr  go to state 37
+
+
+State 31
+
+   16 expr: "*." expr • expr
+
+    T_type  shift, and go to state 14
+    '('     shift, and go to state 15
+    '+'     shift, and go to state 16
+    '*'     shift, and go to state 17
+    "+."    shift, and go to state 18
+    "*."    shift, and go to state 19
+    T_id    shift, and go to state 20
+    T_num   shift, and go to state 21
+    T_real  shift, and go to state 22
+
+    expr  go to state 38
+
+
+State 32
+
     8 asmt: '=' T_id expr •
 
     $default  reduce using rule 8 (asmt)
 
 
-State 31
+State 33
 
     3 stmts: '(' stmt ')' stmts •
 
     $default  reduce using rule 3 (stmts)
 
 
-State 32
-
-   16 expr: '(' expr ')' •
-
-    $default  reduce using rule 16 (expr)
-
-
-State 33
-
-   12 expr: '+' expr expr •
-
-    $default  reduce using rule 12 (expr)
-
-
 State 34
 
-   13 expr: '*' expr expr •
+   17 expr: '(' expr ')' •
 
-    $default  reduce using rule 13 (expr)
+    $default  reduce using rule 17 (expr)
 
 
 State 35
 
-   14 expr: "+." expr expr •
+   13 expr: '+' expr expr •
 
-    $default  reduce using rule 14 (expr)
+    $default  reduce using rule 13 (expr)
 
 
 State 36
 
-   15 expr: "*." expr expr •
+   14 expr: '*' expr expr •
+
+    $default  reduce using rule 14 (expr)
+
+
+State 37
+
+   15 expr: "+." expr expr •
 
     $default  reduce using rule 15 (expr)
+
+
+State 38
+
+   16 expr: "*." expr expr •
+
+    $default  reduce using rule 16 (expr)

@@ -19,6 +19,9 @@ newline \n|\x0A|\x0D\x0A
 "end" {return T_end;}
 "print" {return T_print;}
 
+"int" {yylval.tokentype = type_integer; return T_type;}
+"float" {yylval.tokentype = type_real; return T_type;}
+
 "(" {return '(';}
 ")" {return ')';}
 "+" {return '+';}

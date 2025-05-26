@@ -41,6 +41,8 @@ ST_TABLE_TYPE symbolTable;
 %token T_end "end"
 %token T_print "print"
 
+%token <tokentype> T_type
+
 %token '('
 %token ')'
 %token '+'
@@ -53,6 +55,7 @@ ST_TABLE_TYPE symbolTable;
 %token <lexical> T_id;
 %token <lexical> T_num;
 %token <lexical> T_real;
+
 
 %type <tokentype> expr
 
@@ -81,6 +84,7 @@ asmt : '=' T_id expr {addvar(&symbolTable,$2,$3); insertSTORE($3,lookup_position
 expr : T_num {$$ = type_integer; pushInteger(atoi($1));}
      | T_real {$$ = type_real; insertLDC($1);}
      | T_id {$$ = lookup_type(symbolTable,$1); insertLOAD($$,lookup_position(symbolTable,$1));}
+     | T_type expr {if ($1 != $2) {insertCONVERSION($2, $1);}}
      | '+' expr expr {$$ = type_integer; insertOPERATION(type_integer,"add");}
      | '*' expr expr {$$ = type_integer; insertOPERATION(type_integer,"mul");}
      | "+." expr expr {$$ = type_real; insertOPERATION(type_real,"add");}

@@ -47,5 +47,6 @@ void insertINVOKESTATIC_MULTIARG(char *className, ParType returnType, int argsnu
 void insertALOAD_ARRAY_ELEM(ParType expType);
 void insertASTORE_ARRAY_ELEM(ParType expType);
 
+void insertCONVERSION(ParType Arg1, ParType Arg2);
 
 #endif

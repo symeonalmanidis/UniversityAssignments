@@ -195,3 +195,9 @@ void create_preample(char *className){
 	addInstruction(" .limit locals 30 \n .limit stack 30\n",NO_LABEL);
 
 }
+
+void insertCONVERSION(ParType Arg1, ParType Arg2) {
+	char instruction[MAX_INST_LEN];
+	sprintf(instruction,"%s2%s",typePrefix(Arg1), typePrefix(Arg2));
+	addInstruction(instruction,NO_LABEL);
+}

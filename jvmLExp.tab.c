@@ -140,11 +140,12 @@ extern int yydebug;
     T_start = 258,                 /* "start"  */
     T_end = 259,                   /* "end"  */
     T_print = 260,                 /* "print"  */
-    T_fplus = 261,                 /* "+."  */
-    T_fmul = 262,                  /* "*."  */
-    T_id = 263,                    /* T_id  */
-    T_num = 264,                   /* T_num  */
-    T_real = 265                   /* T_real  */
+    T_type = 261,                  /* T_type  */
+    T_fplus = 262,                 /* "+."  */
+    T_fmul = 263,                  /* "*."  */
+    T_id = 264,                    /* T_id  */
+    T_num = 265,                   /* T_num  */
+    T_real = 266                   /* T_real  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -158,7 +159,7 @@ union YYSTYPE
   char *lexical;
   ParType tokentype;
 
-#line 162 "jvmLExp.tab.c"
+#line 163 "jvmLExp.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -184,24 +185,25 @@ enum yysymbol_kind_t
   YYSYMBOL_T_start = 3,                    /* "start"  */
   YYSYMBOL_T_end = 4,                      /* "end"  */
   YYSYMBOL_T_print = 5,                    /* "print"  */
-  YYSYMBOL_6_ = 6,                         /* '('  */
-  YYSYMBOL_7_ = 7,                         /* ')'  */
-  YYSYMBOL_8_ = 8,                         /* '+'  */
-  YYSYMBOL_9_ = 9,                         /* '*'  */
-  YYSYMBOL_T_fplus = 10,                   /* "+."  */
-  YYSYMBOL_T_fmul = 11,                    /* "*."  */
-  YYSYMBOL_12_ = 12,                       /* '='  */
-  YYSYMBOL_T_id = 13,                      /* T_id  */
-  YYSYMBOL_T_num = 14,                     /* T_num  */
-  YYSYMBOL_T_real = 15,                    /* T_real  */
-  YYSYMBOL_YYACCEPT = 16,                  /* $accept  */
-  YYSYMBOL_program = 17,                   /* program  */
-  YYSYMBOL_18_1 = 18,                      /* $@1  */
-  YYSYMBOL_stmts = 19,                     /* stmts  */
-  YYSYMBOL_stmt = 20,                      /* stmt  */
-  YYSYMBOL_printcmd = 21,                  /* printcmd  */
-  YYSYMBOL_asmt = 22,                      /* asmt  */
-  YYSYMBOL_expr = 23                       /* expr  */
+  YYSYMBOL_T_type = 6,                     /* T_type  */
+  YYSYMBOL_7_ = 7,                         /* '('  */
+  YYSYMBOL_8_ = 8,                         /* ')'  */
+  YYSYMBOL_9_ = 9,                         /* '+'  */
+  YYSYMBOL_10_ = 10,                       /* '*'  */
+  YYSYMBOL_T_fplus = 11,                   /* "+."  */
+  YYSYMBOL_T_fmul = 12,                    /* "*."  */
+  YYSYMBOL_13_ = 13,                       /* '='  */
+  YYSYMBOL_T_id = 14,                      /* T_id  */
+  YYSYMBOL_T_num = 15,                     /* T_num  */
+  YYSYMBOL_T_real = 16,                    /* T_real  */
+  YYSYMBOL_YYACCEPT = 17,                  /* $accept  */
+  YYSYMBOL_program = 18,                   /* program  */
+  YYSYMBOL_19_1 = 19,                      /* $@1  */
+  YYSYMBOL_stmts = 20,                     /* stmts  */
+  YYSYMBOL_stmt = 21,                      /* stmt  */
+  YYSYMBOL_printcmd = 22,                  /* printcmd  */
+  YYSYMBOL_asmt = 23,                      /* asmt  */
+  YYSYMBOL_expr = 24                       /* expr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -532,16 +534,16 @@ union yyalloc
 #define YYLAST   30
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  16
+#define YYNTOKENS  17
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  17
+#define YYNRULES  18
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  37
+#define YYNSTATES  39
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   265
+#define YYMAXUTOK   266
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -559,9 +561,9 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       6,     7,     9,     8,     2,     2,     2,     2,     2,     2,
+       7,     8,    10,     9,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    12,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    13,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -581,15 +583,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,    10,    11,    13,    14,    15
+       5,     6,    11,    12,    14,    15,    16
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    61,    61,    61,    67,    68,    71,    71,    73,    79,
-      82,    83,    84,    85,    86,    87,    88,    89
+       0,    64,    64,    64,    70,    71,    74,    74,    76,    82,
+      84,    85,    86,    87,    88,    89,    90,    91,    92
 };
 #endif
 
@@ -606,9 +608,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "\"start\"", "\"end\"",
-  "\"print\"", "'('", "')'", "'+'", "'*'", "\"+.\"", "\"*.\"", "'='",
-  "T_id", "T_num", "T_real", "$accept", "program", "$@1", "stmts", "stmt",
-  "printcmd", "asmt", "expr", YY_NULLPTR
+  "\"print\"", "T_type", "'('", "')'", "'+'", "'*'", "\"+.\"", "\"*.\"",
+  "'='", "T_id", "T_num", "T_real", "$accept", "program", "$@1", "stmts",
+  "stmt", "printcmd", "asmt", "expr", YY_NULLPTR
 };
 
 static const char *
@@ -632,10 +634,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       2,    -7,     7,   -15,   -15,    16,     5,     4,    10,    -2,
-      19,   -15,   -15,   -15,    10,    10,    10,    10,    10,   -15,
-     -15,   -15,   -15,    10,    16,    20,    10,    10,    10,    10,
-     -15,   -15,   -15,   -15,   -15,   -15,   -15
+       3,    -7,     8,   -15,   -15,     2,     7,     9,    12,    -3,
+      17,   -15,   -15,   -15,    12,    12,    12,    12,    12,    12,
+     -15,   -15,   -15,   -15,    12,     2,   -15,    21,    12,    12,
+      12,    12,   -15,   -15,   -15,   -15,   -15,   -15,   -15
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -644,21 +646,21 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     2,     1,     5,     0,     0,     0,     0,
-       0,     6,     7,     3,     0,     0,     0,     0,     0,    12,
-      10,    11,     8,     0,     5,     0,     0,     0,     0,     0,
-       9,     4,    17,    13,    14,    15,    16
+       0,     6,     7,     3,     0,     0,     0,     0,     0,     0,
+      12,    10,    11,     8,     0,     5,    13,     0,     0,     0,
+       0,     0,     9,     4,    18,    14,    15,    16,    17
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -15,   -15,   -15,     6,   -15,   -15,   -15,   -14
+     -15,   -15,   -15,     5,   -15,   -15,   -15,   -14
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     5,     7,    10,    11,    12,    22
+       0,     2,     5,     7,    10,    11,    12,    23
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -666,42 +668,42 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      25,    26,    27,    28,    29,     1,     3,     4,    13,    30,
-       8,    23,    33,    34,    35,    36,    14,     9,    15,    16,
-      17,    18,     6,    19,    20,    21,    24,    32,     0,     0,
-      31
+      26,    27,    28,    29,    30,    31,     1,     3,     4,     6,
+      32,    24,     8,    13,    35,    36,    37,    38,    14,    15,
+       9,    16,    17,    18,    19,    25,    20,    21,    22,    34,
+      33
 };
 
 static const yytype_int8 yycheck[] =
 {
-      14,    15,    16,    17,    18,     3,    13,     0,     4,    23,
-       5,    13,    26,    27,    28,    29,     6,    12,     8,     9,
-      10,    11,     6,    13,    14,    15,     7,     7,    -1,    -1,
-      24
+      14,    15,    16,    17,    18,    19,     3,    14,     0,     7,
+      24,    14,     5,     4,    28,    29,    30,    31,     6,     7,
+      13,     9,    10,    11,    12,     8,    14,    15,    16,     8,
+      25
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,    17,    13,     0,    18,     6,    19,     5,    12,
-      20,    21,    22,     4,     6,     8,     9,    10,    11,    13,
-      14,    15,    23,    13,     7,    23,    23,    23,    23,    23,
-      23,    19,     7,    23,    23,    23,    23
+       0,     3,    18,    14,     0,    19,     7,    20,     5,    13,
+      21,    22,    23,     4,     6,     7,     9,    10,    11,    12,
+      14,    15,    16,    24,    14,     8,    24,    24,    24,    24,
+      24,    24,    24,    20,     8,    24,    24,    24,    24
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    16,    18,    17,    19,    19,    20,    20,    21,    22,
-      23,    23,    23,    23,    23,    23,    23,    23
+       0,    17,    19,    18,    20,    20,    21,    21,    22,    23,
+      24,    24,    24,    24,    24,    24,    24,    24,    24
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     0,     5,     4,     0,     1,     1,     2,     3,
-       1,     1,     1,     3,     3,     3,     3,     3
+       1,     1,     1,     2,     3,     3,     3,     3,     3
 };
 
 
@@ -1435,85 +1437,90 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* $@1: %empty  */
-#line 61 "jvmLExp.y"
+#line 64 "jvmLExp.y"
                       {create_preample((yyvsp[0].lexical)); symbolTable=NULL; }
-#line 1441 "jvmLExp.tab.c"
+#line 1443 "jvmLExp.tab.c"
     break;
 
   case 3: /* program: "start" T_id $@1 stmts "end"  */
-#line 63 "jvmLExp.y"
+#line 66 "jvmLExp.y"
                         {insertINSTRUCTION("return");
        insertINSTRUCTION(".end method\n");}
-#line 1448 "jvmLExp.tab.c"
+#line 1450 "jvmLExp.tab.c"
     break;
 
   case 8: /* printcmd: "print" expr  */
-#line 73 "jvmLExp.y"
+#line 76 "jvmLExp.y"
                         {
          insertINSTRUCTION("getstatic java/lang/System/out Ljava/io/PrintStream;");
          insertINSTRUCTION("swap");
          insertINVOKEVITRUAL("java/io/PrintStream/println",(yyvsp[0].tokentype),type_void) ;
 }
-#line 1458 "jvmLExp.tab.c"
+#line 1460 "jvmLExp.tab.c"
     break;
 
   case 9: /* asmt: '=' T_id expr  */
-#line 79 "jvmLExp.y"
-                     {addvar(&symbolTable,(yyvsp[-1].lexical),(yyvsp[0].tokentype)); insertSTORE((yyvsp[0].tokentype),lookup_position(symbolTable,(yyvsp[-1].lexical)));
-}
-#line 1465 "jvmLExp.tab.c"
+#line 82 "jvmLExp.y"
+                     {addvar(&symbolTable,(yyvsp[-1].lexical),(yyvsp[0].tokentype)); insertSTORE((yyvsp[0].tokentype),lookup_position(symbolTable,(yyvsp[-1].lexical)));}
+#line 1466 "jvmLExp.tab.c"
     break;
 
   case 10: /* expr: T_num  */
-#line 82 "jvmLExp.y"
+#line 84 "jvmLExp.y"
              {(yyval.tokentype) = type_integer; pushInteger(atoi((yyvsp[0].lexical)));}
-#line 1471 "jvmLExp.tab.c"
+#line 1472 "jvmLExp.tab.c"
     break;
 
   case 11: /* expr: T_real  */
-#line 83 "jvmLExp.y"
+#line 85 "jvmLExp.y"
               {(yyval.tokentype) = type_real; insertLDC((yyvsp[0].lexical));}
-#line 1477 "jvmLExp.tab.c"
+#line 1478 "jvmLExp.tab.c"
     break;
 
   case 12: /* expr: T_id  */
-#line 84 "jvmLExp.y"
-            {(yyval.tokentype) = lookup_type(symbolTable,(yyvsp[0].lexical)); insertLOAD((yyval.tokentype),lookup_position(symbolTable,(yyvsp[0].lexical)));}
-#line 1483 "jvmLExp.tab.c"
-    break;
-
-  case 13: /* expr: '+' expr expr  */
-#line 85 "jvmLExp.y"
-                     {(yyval.tokentype) = type_integer; insertOPERATION(type_integer,"add");}
-#line 1489 "jvmLExp.tab.c"
-    break;
-
-  case 14: /* expr: '*' expr expr  */
 #line 86 "jvmLExp.y"
-                     {(yyval.tokentype) = type_integer; insertOPERATION(type_integer,"mul");}
-#line 1495 "jvmLExp.tab.c"
+            {(yyval.tokentype) = lookup_type(symbolTable,(yyvsp[0].lexical)); insertLOAD((yyval.tokentype),lookup_position(symbolTable,(yyvsp[0].lexical)));}
+#line 1484 "jvmLExp.tab.c"
     break;
 
-  case 15: /* expr: "+." expr expr  */
+  case 13: /* expr: T_type expr  */
 #line 87 "jvmLExp.y"
-                      {(yyval.tokentype) = type_real; insertOPERATION(type_real,"add");}
-#line 1501 "jvmLExp.tab.c"
+                   {if ((yyvsp[-1].tokentype) != (yyvsp[0].tokentype)) {insertCONVERSION((yyvsp[0].tokentype), (yyvsp[-1].tokentype));}}
+#line 1490 "jvmLExp.tab.c"
     break;
 
-  case 16: /* expr: "*." expr expr  */
+  case 14: /* expr: '+' expr expr  */
 #line 88 "jvmLExp.y"
-                      {(yyval.tokentype) = type_real; insertOPERATION(type_real,"mul");}
-#line 1507 "jvmLExp.tab.c"
+                     {(yyval.tokentype) = type_integer; insertOPERATION(type_integer,"add");}
+#line 1496 "jvmLExp.tab.c"
     break;
 
-  case 17: /* expr: '(' expr ')'  */
+  case 15: /* expr: '*' expr expr  */
 #line 89 "jvmLExp.y"
+                     {(yyval.tokentype) = type_integer; insertOPERATION(type_integer,"mul");}
+#line 1502 "jvmLExp.tab.c"
+    break;
+
+  case 16: /* expr: "+." expr expr  */
+#line 90 "jvmLExp.y"
+                      {(yyval.tokentype) = type_real; insertOPERATION(type_real,"add");}
+#line 1508 "jvmLExp.tab.c"
+    break;
+
+  case 17: /* expr: "*." expr expr  */
+#line 91 "jvmLExp.y"
+                      {(yyval.tokentype) = type_real; insertOPERATION(type_real,"mul");}
+#line 1514 "jvmLExp.tab.c"
+    break;
+
+  case 18: /* expr: '(' expr ')'  */
+#line 92 "jvmLExp.y"
                     {(yyval.tokentype) = (yyvsp[-1].tokentype);}
-#line 1513 "jvmLExp.tab.c"
+#line 1520 "jvmLExp.tab.c"
     break;
 
 
-#line 1517 "jvmLExp.tab.c"
+#line 1524 "jvmLExp.tab.c"
 
       default: break;
     }
@@ -1737,7 +1744,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 93 "jvmLExp.y"
+#line 96 "jvmLExp.y"
 
 
 
