@@ -39,6 +39,10 @@ struct reduce_context curr_rc;
   char *lexical;
   ParType tokentype;
   struct reduce_context rc;
+  struct {
+    ParType resulttype;
+    char * jvm_op;
+  } op;
 }
 
 
@@ -55,10 +59,7 @@ struct reduce_context curr_rc;
 %token ')'
 %token '['
 %token ']'
-%token '+'
-%token '*'
-%token T_fplus "+."
-%token T_fmul "*."
+%token <op> T_op
 
 %token <lexical> T_static_op
 
@@ -97,10 +98,7 @@ expr : T_num {$$ = type_integer; pushInteger(atoi($1));}
      | T_real {$$ = type_real; insertLDC($1);}
      | T_id {$$ = lookup_type(symbolTable,$1); insertLOAD($$,lookup_position(symbolTable,$1));}
      | T_type expr {if ($1 != $2) {insertCONVERSION($2, $1);}}
-     | '+' expr expr {$$ = type_integer; insertOPERATION(type_integer,"add");}
-     | '*' expr expr {$$ = type_integer; insertOPERATION(type_integer,"mul");}
-     | "+." expr expr {$$ = type_real; insertOPERATION(type_real,"add");}
-     | "*." expr expr {$$ = type_real; insertOPERATION(type_real,"mul");}
+     | T_op expr expr {$$ = $1.resulttype; insertOPERATION($1.resulttype, $1.jvm_op);}
      | T_static_op expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG($1, $$, 2, $2, $3);}
      | "reduce" T_static_op '[' expr <rc>{$$ = curr_rc; curr_rc.static_op_path=$2; curr_rc.type=$4;}[prev_rc] reduceexprlist ']' {$$ = $6; curr_rc = $prev_rc;}
      | '(' expr ')' {$$ = $2;}

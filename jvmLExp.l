@@ -27,10 +27,10 @@ newline \n|\x0A|\x0D\x0A
 ")" {return ')';}
 "[" {return '[';}
 "]" {return ']';} 
-"+" {return '+';}
-"*" {return '*';}
-"+." {return T_fplus;}
-"*." {return T_fmul;}
+"+" {yylval.op.resulttype = type_integer; yylval.op.jvm_op = "add"; return T_op;}
+"*" {yylval.op.resulttype = type_integer; yylval.op.jvm_op = "mul"; return T_op;}
+"+." {yylval.op.resulttype = type_real; yylval.op.jvm_op = "add"; return T_op;}
+"*." {yylval.op.resulttype = type_real; yylval.op.jvm_op = "mul"; return T_op;}
 
 "min" {yylval.lexical = "java/lang/Math/min";  return T_static_op;}
 "max" {yylval.lexical = "java/lang/Math/max"; return T_static_op;}
