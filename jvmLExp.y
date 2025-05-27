@@ -86,7 +86,7 @@ stmts: closed_stmt stmts
 
 closed_stmt: '(' stmt ')';
 
-stmt : printcmd | asmt ;
+stmt : printcmd | asmt;
 
 printcmd : "print" expr {
          insertINSTRUCTION("getstatic java/lang/System/out Ljava/io/PrintStream;");
