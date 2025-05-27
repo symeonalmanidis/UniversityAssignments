@@ -31,6 +31,8 @@ struct reduce_context {
 
 struct reduce_context curr_rc;
 
+#define TYPE_TO_STRING(TYPE) (TYPE == type_integer? "integer" : (TYPE == type_real? "real" : "error"))
+
 %}
 /* Output informative error messages (bison Option) */
 %define parse.error verbose
@@ -71,7 +73,6 @@ struct reduce_context curr_rc;
 
 
 %type <tokentype> expr
-%type <tokentype> reduceexprlist
 
 %%
 program: "start" T_id {create_preample($2); symbolTable=NULL; }
@@ -81,12 +82,13 @@ program: "start" T_id {create_preample($2); symbolTable=NULL; }
 	;
 
 stmts: closed_stmt stmts
+      | error stmts
       | %empty
       ;
 
 closed_stmt: '(' stmt ')';
 
-stmt : printcmd | asmt;
+stmt : printcmd | asmt ;
 
 printcmd : "print" expr {
          insertINSTRUCTION("getstatic java/lang/System/out Ljava/io/PrintStream;");
@@ -94,20 +96,27 @@ printcmd : "print" expr {
          insertINVOKEVITRUAL("java/io/PrintStream/println",$2,type_void);
 };
 
-asmt : '=' T_id expr {addvar(&symbolTable,$2,$3); insertSTORE($3,lookup_position(symbolTable,$2));};
+asmt : '=' T_id expr {ParType var_type;
+                      if (!(var_type = lookup_type(symbolTable, $2))) {addvar(&symbolTable,$2,$3); var_type = $3;}
+                      typeDefinition(var_type,$3);
+                      insertSTORE($3,lookup_position(symbolTable,$2));};
 
 expr : T_num {$$ = type_integer; pushInteger(atoi($1));}
      | T_real {$$ = type_real; insertLDC($1);}
-     | T_id {$$ = lookup_type(symbolTable,$1); insertLOAD($$,lookup_position(symbolTable,$1));}
+     | T_id {if (($$ = lookup_type(symbolTable, $1))) {insertLOAD($$,lookup_position(symbolTable,$1));}
+            else {ERR_VAR_MISSING($1, code_line);}}
      | T_type expr {if ($1 != $2) {insertCONVERSION($2, $1);}}
-     | T_op expr expr {$$ = $1.resulttype; insertOPERATION($1.resulttype, $1.jvm_op);}
-     | T_static_op expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG($1, $$, 2, $2, $3);}
-     | "reduce" T_static_op '[' expr <rc>{$$ = curr_rc; curr_rc.static_op_path=$2; curr_rc.type=$4;}[prev_rc] reduceexprlist ']' {$$ = $6; curr_rc = $prev_rc;}
+     | T_op expr expr {if ($1.resulttype == $2 && $1.resulttype == $3) {$$ = $1.resulttype; insertOPERATION($1.resulttype, $1.jvm_op);} 
+                      else {ERR_TYPE_MISSMATCH(TYPE_TO_STRING($1.resulttype), code_line);} }
+     | T_static_op expr expr {$$ = typeDefinition($2,$3); 
+                              insertINVOKESTATIC_MULTIARG($1, $$, 2, $2, $3);}
+     | "reduce" T_static_op '[' expr <rc>{$$ = curr_rc; curr_rc.static_op_path=$2; curr_rc.type=$4;}[prev_rc] reduceexprlist ']' {$$ = curr_rc.type; curr_rc = $prev_rc;}
      | '(' expr ')' {$$ = $2;}
      ;
 
-reduceexprlist : expr {insertINVOKESTATIC_MULTIARG(curr_rc.static_op_path, curr_rc.type, 2, curr_rc.type, curr_rc.type);} reduceexprlist {$$ = $3;}
-               | %empty {$$ = curr_rc.type;} 
+reduceexprlist : expr {typeDefinition($1, curr_rc.type);
+                       insertINVOKESTATIC_MULTIARG(curr_rc.static_op_path, curr_rc.type, 2, curr_rc.type, curr_rc.type);} reduceexprlist
+               | %empty
                ;
 %%
 
