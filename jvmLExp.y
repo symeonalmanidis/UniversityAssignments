@@ -80,11 +80,13 @@ program: "start" T_id {create_preample($2); symbolTable=NULL; }
        insertINSTRUCTION(".end method\n");}
 	;
 
-stmts: '(' stmt ')' stmts
+stmts: closed_stmt stmts
       | %empty
       ;
 
-stmt : printcmd | asmt;
+closed_stmt: '(' stmt ')';
+
+stmt : printcmd | asmt ;
 
 printcmd : "print" expr {
          insertINSTRUCTION("getstatic java/lang/System/out Ljava/io/PrintStream;");
