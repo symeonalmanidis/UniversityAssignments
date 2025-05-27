@@ -24,6 +24,12 @@ int no_errors;
 ST_TABLE_TYPE symbolTable;
 #include "codeFacilities.h"
 
+struct reduce_context {
+  char * static_op_path;
+  ParType type;  
+};
+
+struct reduce_context curr_rc;
 
 %}
 /* Output informative error messages (bison Option) */
@@ -32,6 +38,7 @@ ST_TABLE_TYPE symbolTable;
 %union{
   char *lexical;
   ParType tokentype;
+  struct reduce_context rc;
 }
 
 
@@ -40,18 +47,20 @@ ST_TABLE_TYPE symbolTable;
 %token T_start "start"
 %token T_end "end"
 %token T_print "print"
+%token T_reduce "reduce"
 
 %token <tokentype> T_type
 
 %token '('
 %token ')'
+%token '['
+%token ']'
 %token '+'
 %token '*'
 %token T_fplus "+."
 %token T_fmul "*."
 
-%token T_min "min"
-%token T_max "max"
+%token <lexical> T_static_op
 
 %token '='
 
@@ -61,7 +70,7 @@ ST_TABLE_TYPE symbolTable;
 
 
 %type <tokentype> expr
-
+%type <tokentype> reduceexprlist
 
 %%
 program: "start" T_id {create_preample($2); symbolTable=NULL; }
@@ -79,7 +88,7 @@ stmt : printcmd | asmt;
 printcmd : "print" expr {
          insertINSTRUCTION("getstatic java/lang/System/out Ljava/io/PrintStream;");
          insertINSTRUCTION("swap");
-         insertINVOKEVITRUAL("java/io/PrintStream/println",$2,type_void) ;
+         insertINVOKEVITRUAL("java/io/PrintStream/println",$2,type_void);
 };
 
 asmt : '=' T_id expr {addvar(&symbolTable,$2,$3); insertSTORE($3,lookup_position(symbolTable,$2));};
@@ -92,12 +101,14 @@ expr : T_num {$$ = type_integer; pushInteger(atoi($1));}
      | '*' expr expr {$$ = type_integer; insertOPERATION(type_integer,"mul");}
      | "+." expr expr {$$ = type_real; insertOPERATION(type_real,"add");}
      | "*." expr expr {$$ = type_real; insertOPERATION(type_real,"mul");}
-     | "min" expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG("java/lang/Math/min", $$, 2, $2, $3);}
-     | "max" expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG("java/lang/Math/max", $$, 2, $2, $3);}
+     | T_static_op expr expr {$$ = typeDefinition($2, $3); insertINVOKESTATIC_MULTIARG($1, $$, 2, $2, $3);}
+     | "reduce" T_static_op '[' expr <rc>{$$ = curr_rc; curr_rc.static_op_path=$2; curr_rc.type=$4;}[prev_rc] reduceexprlist ']' {$$ = $6; curr_rc = $prev_rc;}
      | '(' expr ')' {$$ = $2;}
      ;
 
-
+reduceexprlist : expr {insertINVOKESTATIC_MULTIARG(curr_rc.static_op_path, curr_rc.type, 2, curr_rc.type, curr_rc.type);} reduceexprlist {$$ = $3;}
+               | %empty {$$ = curr_rc.type;} 
+               ;
 %%
 
 
