@@ -1,0 +1,6 @@
+[submodule "coursework1_2024"]
+	path = coursework1_2024
+	url = .\\coursework1_2024\\
+[submodule "coursework2_2025"]
+	path = coursework2_2025
+	url = .\\coursework2_2025\\
