@@ -4,6 +4,8 @@
 #include <ranges>
 #include <mdspan>
 #include <queue>
+#include <fstream>
+#include <string>
 
 class FastMarching3D
 {
@@ -182,6 +184,33 @@ public:
     Span3D<double> result()
     {
         return distanceGrid;
+    }
+
+    void saveToVTK(const std::string& filename)
+    {
+        std::ofstream file(filename);
+        if (!file.is_open()) return;
+
+        // VTK Header
+        file << "# vtk DataFile Version 3.0\n";
+        file << "Fast Marching Distance Field\n";
+        file << "ASCII\n";
+        file << "DATASET STRUCTURED_POINTS\n";
+        file << "DIMENSIONS " << dx << " " << dy << " " << dz << "\n";
+        file << "ORIGIN 0 0 0\n";
+        file << "SPACING 1 1 1\n";
+
+        // Point Data
+        file << "POINT_DATA " << (dx * dy * dz) << "\n";
+        file << "SCALARS distance double 1\n";
+        file << "LOOKUP_TABLE default\n";
+
+        for (long long z = 0; z < dz; ++z)
+            for (long long y = 0; y < dy; ++y)
+                for (long long x = 0; x < dx; ++x)
+                    file << distanceGrid[std::array{ x, y, z }] << "\n";
+
+        file.close();
     }
 };
 
