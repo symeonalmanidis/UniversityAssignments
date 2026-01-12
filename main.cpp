@@ -1,9 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include <vector>
 
 #include "fast_marching.h"
-
 
 int main()
 {
