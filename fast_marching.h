@@ -9,9 +9,11 @@
 
 
 
-class FastMarching3D {
+class FastMarching3D 
+{
 private:
-    struct Point {
+    struct Point 
+    {
         long long x, y, z;
     };
 
@@ -19,7 +21,8 @@ private:
     using Span3D = std::mdspan<T, std::dextents<long long, 3>>;
 
 	
-    enum class State : uint8_t {
+    enum class State : uint8_t 
+    {
         FAR = 0,
         NARROW = 1,
         FROZEN = 2
@@ -31,9 +34,11 @@ private:
     std::vector<State> stateGridBuffer;
     Span3D<State> stateGrid;
 
-    auto up_to(long long n) {
+    auto up_to(long long n) 
+    {
         return std::views::iota(0ll, n);
     }
+
 public:
 	explicit FastMarching3D(long long dim_x, long long dim_y, long long dim_z)
 		: dx(dim_x), dy(dim_y), dz(dim_z),
@@ -45,7 +50,8 @@ public:
 		
 	}
 	
-    void addBoundaryVoxel(const Point& p, double knownDist) {
+    void addBoundaryVoxel(const Point& p, double knownDist) 
+    {
         // 1. Set the exact distance (e.g., calculated via geometry)
         distanceGrid[std::to_array({p.x, p.y, p.z})] = knownDist;
         // 2. Freeze it immediately
@@ -55,11 +61,13 @@ public:
         updateNeighbors(p);
     }
 
-    void updateNeighbors(const Point& p) {
+    void updateNeighbors(const Point& p) 
+    {
         static constexpr auto directions = std::to_array<Point>({Point{1ll, 0ll, 0ll}, Point{-1ll,  0ll, 0ll},
                                                                  Point{0ll, 1ll, 0ll}, Point{ 0ll, -1ll, 0ll},
                                                                  Point{0ll, 0ll, 1ll}, Point{ 0ll,  0ll,-1ll} });
-        for (const auto& direction : directions) {
+        for (const auto& direction : directions) 
+        {
             long long nx = p.x + direction.x;
             long long ny = p.y + direction.y;
             long long nz = p.z + direction.z;
@@ -70,17 +78,19 @@ public:
             if (not is_valid)
                 continue;
             // Only update if it's still FAR
-            if (stateGrid[std::to_array({ p.x, p.y, p.z })] == State::FAR) {
+            if (stateGrid[std::to_array({ p.x, p.y, p.z })] == State::FAR) 
+            {
                 stateGrid[std::to_array({ p.x, p.y, p.z })] = State::NARROW;
                 // Initial distance can be set to a large value
                 distanceGrid[std::to_array({ p.x, p.y, p.z })] = std::numeric_limits<double>::max();
             }
-
 		}
     }
 
-	inline void initSphere(const Point& center, double radius ) {
-        for (auto&& [x, y, z] : std::views::cartesian_product(up_to(dx), up_to(dy), up_to(dz))) {
+	inline void initSphere(const Point& center, double radius ) 
+    {
+        for (auto&& [x, y, z] : std::views::cartesian_product(up_to(dx), up_to(dy), up_to(dz))) 
+        {
             // Calculate distance from voxel center to sphere center
             const auto dx = static_cast<double>(x - center.x);
             const auto dy = static_cast<double>(y - center.y);
@@ -96,7 +106,8 @@ public:
             // or the voxels intersecting the boundary.
 
             // Simple approach: Seed voxels within 1 unit of the surface
-            if (std::abs(distToSurface) < 1.0) {
+            if (std::abs(distToSurface) < 1.0) 
+            {
                 // We use absolute distance because FMM propagates positive distances
                 addBoundaryVoxel(Point{x, y, z}, std::abs(distToSurface));
             }
@@ -112,13 +123,16 @@ public:
 
         std::priority_queue<Point, std::vector<Point>, decltype(comparePoints)> pq;
 
-        for (auto&& [x, y, z] : std::views::cartesian_product(up_to(dx), up_to(dy), up_to(dz))) {
-			if (stateGrid[std::to_array({ x, y, z })] == State::NARROW) {
+        for (auto&& [x, y, z] : std::views::cartesian_product(up_to(dx), up_to(dy), up_to(dz))) 
+        {
+			if (stateGrid[std::to_array({ x, y, z })] == State::NARROW) 
+            {
                 pq.push(Point{ x, y, z });
             }
         }
 
-        while (not pq.empty()) {
+        while (not pq.empty()) 
+        {
             const Point current = pq.top(); pq.pop();
             if (stateGrid[std::to_array({current.x, current.y, current.z})] == State::FROZEN) 
                 continue;
@@ -127,7 +141,8 @@ public:
         }
 	}
 
-	Span3D<double> result() {
+	Span3D<double> result() 
+    {
 		return distanceGrid;
 	}
 };
