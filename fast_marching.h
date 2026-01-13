@@ -280,23 +280,23 @@ public:
         if (!file.is_open()) return;
 
         // VTK Header
-        file << "# vtk DataFile Version 3.0\n";
-        file << "Fast Marching Distance Field\n";
-        file << "ASCII\n";
-        file << "DATASET STRUCTURED_POINTS\n";
-        file << "DIMENSIONS " << dx << " " << dy << " " << dz << "\n";
-        file << "ORIGIN 0 0 0\n";
-        file << "SPACING 1 1 1\n";
+        auto out_it = std::ostream_iterator<char>(file);
+       
+		out_it = std::format_to(out_it, "# vtk DataFile Version 3.0\n");
+		out_it = std::format_to(out_it, "Fast Marching Distance Field\n");
+		out_it = std::format_to(out_it, "ASCII\n");
+		out_it = std::format_to(out_it, "DATASET STRUCTURED_POINTS\n");
+		out_it = std::format_to(out_it, "DIMENSIONS {} {} {}\n", dx, dy, dz);
+		out_it = std::format_to(out_it, "ORIGIN 0 0 0\n");
+		out_it = std::format_to(out_it, "SPACING 1 1 1\n");
 
-        // Point Data
-        file << "POINT_DATA " << (dx * dy * dz) << "\n";
-        file << "SCALARS distance double 1\n";
-        file << "LOOKUP_TABLE default\n";
+		// point data
+		out_it = std::format_to(out_it, "POINT_DATA {}\n", (dx * dy * dz));
+		out_it = std::format_to(out_it, "SCALARS distance double 1\n");
+		out_it = std::format_to(out_it, "LOOKUP_TABLE default\n");
 
-        for (long long z = 0; z < dz; ++z)
-            for (long long y = 0; y < dy; ++y)
-                for (long long x = 0; x < dx; ++x)
-                    file << distanceGrid[std::array{ x, y, z }] << "\n";
+		for (auto&& [z, y, x] : std::views::cartesian_product(up_to(dz), up_to(dy), up_to(dx)))
+			out_it = std::format_to(out_it, "{}\n", distanceGrid[std::array{ x, y, z }]);
 
         file.close();
     }
