@@ -130,9 +130,97 @@ public:
             const double len = std::sqrt(dist_x * dist_x + dist_y * dist_y + dist_z * dist_z);
             const double distToSurface = len - radius;
 
-            if (std::abs(distToSurface) < 1.0)
+            if (distToSurface < 1.0)
             {
                 addBoundaryVoxel(Point{ x, y, z }, std::abs(distToSurface));
+            }
+        }
+    }
+
+    inline void initCone(const Point& center, double radius, double height)
+    {
+        const long long min_x = std::max(0ll, static_cast<long long>(center.x - radius - 2.0));
+        const long long max_x = std::min(dx, static_cast<long long>(center.x + radius + 2.0));
+        const long long min_y = std::max(0ll, static_cast<long long>(center.y - 2.0));
+        const long long max_y = std::min(dy, static_cast<long long>(center.y + height + 2.0));
+        const long long min_z = std::max(0ll, static_cast<long long>(center.z - radius - 2.0));
+        const long long max_z = std::min(dz, static_cast<long long>(center.z + radius + 2.0));
+
+        for (auto&& [x, y, z] : std::views::cartesian_product(
+            std::views::iota(min_x, max_x),
+            std::views::iota(min_y, max_y),
+            std::views::iota(min_z, max_z)))
+        {
+            const double px = static_cast<double>(x) - center.x;
+            const double py = static_cast<double>(y) - center.y;
+            const double pz = static_cast<double>(z) - center.z;
+
+            const double q = std::sqrt(px * px + pz * pz);
+            
+            const double vx = radius;
+            const double vy = -height;
+            const double ptx = q;
+            const double pty = py - height;
+            const double t = std::clamp((ptx * vx + pty * vy) / (vx * vx + vy * vy), 0.0, 1.0);
+            const double closest_slant_x = 0.0 + t * vx;
+            const double closest_slant_y = height + t * vy;
+            const double d_slant_sq = (q - closest_slant_x) * (q - closest_slant_x) + (py - closest_slant_y) * (py - closest_slant_y);
+
+            const double closest_base_x = std::min(q, radius);
+            const double d_base_sq = (q - closest_base_x) * (q - closest_base_x) + (py - 0.0) * (py - 0.0);
+
+            double distToSurface = std::sqrt(std::min(d_slant_sq, d_base_sq));
+
+            const bool inside = (py > 0.0 && py < height && q < radius * (height - py) / height);
+            if (inside)
+                distToSurface = -distToSurface;
+
+            if (distToSurface < 1.0)
+            {
+                addBoundaryVoxel(Point{ x, y, z }, distToSurface);
+            }
+        }
+    }
+
+    inline void initBox(const Point& minCorner, const Point& maxCorner)
+    {
+        const double cx = (minCorner.x + maxCorner.x) * 0.5;
+        const double cy = (minCorner.y + maxCorner.y) * 0.5;
+        const double cz = (minCorner.z + maxCorner.z) * 0.5;
+
+        const double ex = (maxCorner.x - minCorner.x) * 0.5;
+        const double ey = (maxCorner.y - minCorner.y) * 0.5;
+        const double ez = (maxCorner.z - minCorner.z) * 0.5;
+
+        const long long min_x = std::max(0ll, minCorner.x - 2);
+        const long long max_x = std::min(dx, maxCorner.x + 2);
+        const long long min_y = std::max(0ll, minCorner.y - 2);
+        const long long max_y = std::min(dy, maxCorner.y + 2);
+        const long long min_z = std::max(0ll, minCorner.z - 2);
+        const long long max_z = std::min(dz, maxCorner.z + 2);
+
+        for (auto&& [x, y, z] : std::views::cartesian_product(
+            std::views::iota(min_x, max_x),
+            std::views::iota(min_y, max_y),
+            std::views::iota(min_z, max_z)))
+        {
+            const double px = static_cast<double>(x) - cx;
+            const double py = static_cast<double>(y) - cy;
+            const double pz = static_cast<double>(z) - cz;
+
+            const double dx_val = std::abs(px) - ex;
+            const double dy_val = std::abs(py) - ey;
+            const double dz_val = std::abs(pz) - ez;
+
+            const double distToSurface =
+                std::sqrt(std::max(dx_val, 0.0) * std::max(dx_val, 0.0) +
+                    std::max(dy_val, 0.0) * std::max(dy_val, 0.0) +
+                    std::max(dz_val, 0.0) * std::max(dz_val, 0.0)) +
+                std::min(std::max({ dx_val, dy_val, dz_val }), 0.0);
+
+            if (distToSurface < 1.0)
+            {
+                addBoundaryVoxel(Point{ x, y, z }, distToSurface);
             }
         }
     }
