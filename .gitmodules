@@ -1,0 +1,3 @@
+[submodule "fast_marching"]
+	path = fast_marching
+	url = https://github.com/symeonalmanidis/fast_marching
