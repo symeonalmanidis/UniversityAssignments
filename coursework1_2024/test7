@@ -1,0 +1,10 @@
+var int : x;
+var set_of 53..101 : seta;
+var set_of 42..202 : setb;
+var set_of 01..1005 : setc;
+
+constraint x in seta;
+constraint setc subset seta union setb;
+constraint x in setb && x in setc;
+
+solve maximize x;

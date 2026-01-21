@@ -1,0 +1,12 @@
+var int : x;
+var int : y;
+var int : w;
+var int : z;
+var bool : bx; 
+
+
+constraint x > 10 && y =< w;
+constraint z == x + 10;
+constraint bx #= z == x + 10;
+
+solve satisfy;

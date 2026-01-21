@@ -1,0 +1,16 @@
+
+var int : x;
+var 10 .. 20 : y; 
+var int : z;
+var bool: b;
+
+var array [0..10] of int: arr;
+var array [0..20] of bool: arrb;
+
+constraint arr[x] == 20;
+constraint arr[b] >= 30;
+constraint arrb[x] > 10;
+constraint arrb[x] && true;
+constraint arr[x] && true;
+
+solve satisfy;

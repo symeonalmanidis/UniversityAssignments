@@ -1,0 +1,11 @@
+
+var int : x;
+
+var 10 .. 20 : y; 
+var bool: y;
+
+var set_of bool: z;
+
+constraint x > y;
+
+solve satisfy;
