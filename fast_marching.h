@@ -132,7 +132,7 @@ public:
 
             if (distToSurface < 1.0)
             {
-                addBoundaryVoxel(Point{ x, y, z }, std::abs(distToSurface));
+                addBoundaryVoxel(Point{ x, y, z }, distToSurface);
             }
         }
     }
