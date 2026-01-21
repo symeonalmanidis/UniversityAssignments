@@ -1,0 +1,11 @@
+var int : x;
+var array [1..10] of int : myarray;
+var array [1..40] of bool : myboolarray2;
+
+constraint x < myarray[1];
+constraint myarray[2] == 10 && myarray[3] > 20;
+constraint myarray[x] == 10 && myarray[myarray[x]] > 20;
+constraint myboolarray2[0] && true;
+
+
+solve maximize x;

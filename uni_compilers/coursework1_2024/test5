@@ -1,0 +1,10 @@
+var int : x;
+var int : y;
+var bool : z;
+var 5..10 : a;
+
+constraint x < 10 && 5 =< x;
+constraint y < 10 ~> a == x && y > 3;
+constraint z #= x < 8 && 6 =< x;
+
+solve maximize a;
