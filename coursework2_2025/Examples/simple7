@@ -1,0 +1,6 @@
+start simple7
+(= x max 3.1 2.0)
+(print x)
+(= y min 4.5 1.1)
+(print y)
+end

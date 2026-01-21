@@ -1,0 +1,6 @@
+start simple6
+(= x max 3 2)
+(print x)
+(= y + 10 min 4 1)
+(print y)
+end
